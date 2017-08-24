@@ -5,12 +5,12 @@ import time
 import fire
 import collections
 
-requests.adapters.DEFAULT_RETRIES = 1
+requests.adapters.DEFAULT_RETRIES = 0
 
 url = 'http://127.0.0.1:80'
 timeout = 1.0 # Seconds
 requesttimeout = 1.0 # Seconds
-limit = 60*15 # Seconds
+limit = 15 # Seconds
 
 def check(url=url, timeout=timeout, requesttimeout=requesttimeout, limit=limit):
     """Checks URL
