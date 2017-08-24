@@ -18,6 +18,8 @@ def check(url=url, timeout=timeout, requesttimeout=requesttimeout):
     Return:
         """
     c = 0
+    limit = 2
+
     while True:
         c += 1
         try:
@@ -25,9 +27,10 @@ def check(url=url, timeout=timeout, requesttimeout=requesttimeout):
         except requests.exceptions.RequestException as e:
             # print(type(e).__name__)
             return type(e).__name__
+        if timeout > 0:
+            time.sleep(timeout)
 
-        time.sleep(timeout)
-        if c > 2:
+        if c > limit:
             exit()
 
 if __name__ == '__main__':
