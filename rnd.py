@@ -5,38 +5,45 @@ import time
 import fire
 import collections
 
-url = 'http://www.google.com:80'
-timeout = 1 # Seconds
 requests.adapters.DEFAULT_RETRIES = 1
-requesttimeout = 1 # Seconds
 
-def check(url=url, timeout=timeout, requesttimeout=requesttimeout):
+url = 'http://127.0.0.1:80'
+timeout = 1.0 # Seconds
+requesttimeout = 1.0 # Seconds
+limit = 20 # Seconds
+
+def check(url=url, timeout=timeout, requesttimeout=requesttimeout, limit=limit):
     """Checks URL
     Args:
         url (str): URL to check
-        timeout (int): Time between checks, seconds
-        requesttimeout (int): Time between checks, seconds
+        timeout (float): Time between checks, seconds
+        requesttimeout (float): Time between checks, seconds
+        limit (int): Limit for reports
     Return:
         """
-    c = 0
-    limit = 2
     data = collections.defaultdict(int)
-
+    starttime = time.time()
     while True:
-        c += 1
         try:
             r = requests.get(url, timeout=requesttimeout)
         except requests.exceptions.RequestException as e:
             error = type(e).__name__
-            # print(error)
             data[error] += 1
-            # return type(e).__name__
 
         if timeout > 0:
             time.sleep(timeout)
 
-        if c > limit:
-            return data
+        exectime = time.time() - starttime
+        if exectime > limit:
+            if data:
+                print(data)
+                # TODO send alert
+
+            data = collections.defaultdict(int)
+            starttime = time.time()
+
+            # TODO send to influx
+
 
 if __name__ == '__main__':
   fire.Fire(check)
