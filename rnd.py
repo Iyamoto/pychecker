@@ -1,3 +1,5 @@
+# PoC for internal Docker infrastructure HTTP checker
+
 import requests
 import time
 
