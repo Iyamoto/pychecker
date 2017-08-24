@@ -4,25 +4,31 @@ import requests
 import time
 import fire
 
-url = 'http://127.0.0.1:80'
+url = 'http://www.google.com:801'
 timeout = 1 # Seconds
 requests.adapters.DEFAULT_RETRIES = 1
-reqesttimeout = 1 # Seconds
+requesttimeout = 1 # Seconds
 
-def check(url=url, timeout=timeout, reqesttimeout=reqesttimeout):
+def check(url=url, timeout=timeout, requesttimeout=requesttimeout):
     """Checks URL
     Args:
         url (str): URL to check
         timeout (int): Time between checks, seconds
+        requesttimeout (int): Time between checks, seconds
     Return:
         """
+    c = 0
     while True:
-        r = requests.get(url, timeout=reqesttimeout)
-        if not r.ok:
-            return (r.status_code, r.reason)
-        else:
-            return (r.status_code, r.reason)
+        c += 1
+        try:
+            r = requests.get(url, timeout=requesttimeout)
+        except requests.exceptions.RequestException as e:
+            # print(type(e).__name__)
+            return type(e).__name__
+
         time.sleep(timeout)
+        if c > 2:
+            exit()
 
 if __name__ == '__main__':
   fire.Fire(check)
