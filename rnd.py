@@ -1,15 +1,12 @@
-from bottle import route, run, template
+import requests
+import time
 
-@route('/')
-def index():
-    return '<h1>pyweb</h1>'
+url = 'http://127.0.0.1:8080'
+timeout = 1 # Seconds
 
-@route('/health')
-def health():
-    return 'ok'
-
-@route('/v1/<action>/<param>')
-def apiv1(action, param):
-    return template('<b>{{action}} {{param}}</b>!', action=action, user=param)
-
-run(host='0.0.0.0', port=8080)
+def check(url=url, timeout=timeout):
+    while True:
+        r = requests.get(url)
+        if not r.ok:
+            return (r.status_code, r.reason)
+        time.sleep(timeout)
